@@ -1,0 +1,163 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-body);
+  --font-mono: var(--font-geist-mono);
+  --font-heading: var(--font-display);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-silver: var(--silver);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
+}
+
+/* Titan's Gym — light mode (alternate theme, brand-consistent) */
+:root {
+  --background: #fafafa;
+  --foreground: #0f172a;
+  --card: #ffffff;
+  --card-foreground: #0f172a;
+  --popover: #ffffff;
+  --popover-foreground: #0f172a;
+  --primary: #dc2626;
+  --primary-foreground: #fafafa;
+  --secondary: #f1f1f2;
+  --secondary-foreground: #0f172a;
+  --muted: #f1f1f2;
+  --muted-foreground: #475569;
+  --accent: #f1f1f2;
+  --accent-foreground: #0f172a;
+  --destructive: #ea580c;
+  --border: #e4e4e7;
+  --input: #e4e4e7;
+  --ring: #dc2626;
+  --success: #16a34a;
+  --success-foreground: #fafafa;
+  --silver: #71717a;
+  --chart-1: #dc2626;
+  --chart-2: #71717a;
+  --chart-3: #ef4444;
+  --chart-4: #a1a1aa;
+  --chart-5: #0f172a;
+  --radius: 0.5rem;
+  --sidebar: #ffffff;
+  --sidebar-foreground: #0f172a;
+  --sidebar-primary: #dc2626;
+  --sidebar-primary-foreground: #fafafa;
+  --sidebar-accent: #f1f1f2;
+  --sidebar-accent-foreground: #0f172a;
+  --sidebar-border: #e4e4e7;
+  --sidebar-ring: #dc2626;
+}
+
+/* Titan's Gym — dark mode (default brand identity) */
+.dark {
+  --background: #0a0a0a;
+  --foreground: #f8fafc;
+  --card: #151515;
+  --card-foreground: #f8fafc;
+  --popover: #151515;
+  --popover-foreground: #f8fafc;
+  --primary: #dc2626;
+  --primary-foreground: #f8fafc;
+  --secondary: #1f1f1f;
+  --secondary-foreground: #f8fafc;
+  --muted: #1f1f1f;
+  --muted-foreground: #a1a1aa;
+  --accent: #1f1f1f;
+  --accent-foreground: #f8fafc;
+  --destructive: #ea580c;
+  --border: #27272a;
+  --input: #27272a;
+  --ring: #dc2626;
+  --success: #22c55e;
+  --success-foreground: #0a0a0a;
+  --silver: #a1a1aa;
+  --chart-1: #dc2626;
+  --chart-2: #a1a1aa;
+  --chart-3: #ef4444;
+  --chart-4: #71717a;
+  --chart-5: #f8fafc;
+  --sidebar: #0a0a0a;
+  --sidebar-foreground: #f8fafc;
+  --sidebar-primary: #dc2626;
+  --sidebar-primary-foreground: #f8fafc;
+  --sidebar-accent: #151515;
+  --sidebar-accent-foreground: #f8fafc;
+  --sidebar-border: #27272a;
+  --sidebar-ring: #dc2626;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  html {
+    @apply font-sans;
+  }
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-heading uppercase tracking-tight;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  .glow-red {
+    box-shadow: 0 0 32px rgba(220, 38, 38, 0.35);
+  }
+  .gallery-treatment {
+    filter: grayscale(0.25) contrast(1.08) brightness(0.92);
+    transition: filter 300ms ease;
+  }
+  .gallery-treatment:hover {
+    filter: grayscale(0) contrast(1.1) brightness(1);
+  }
+}
