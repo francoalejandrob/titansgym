@@ -40,6 +40,9 @@ export function TestimoniosManager({ items }: { items: Testimonio[] }) {
   const [form, setForm] = React.useState<TestimonioInput>(emptyForm);
   const [pending, startTransition] = React.useTransition();
 
+  const pendientes = items.filter((t) => !t.activo);
+  const aprobados = items.filter((t) => t.activo);
+
   function openNew() {
     setEditing(null);
     setForm(emptyForm);
@@ -97,8 +100,76 @@ export function TestimoniosManager({ items }: { items: Testimonio[] }) {
         </Button>
       </div>
 
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        {items.map((t) => (
+      {/* Pendientes de aprobación (enviados desde el sitio web) */}
+      {pendientes.length > 0 && (
+        <div className="space-y-3">
+          <div className="flex items-center gap-2">
+            <span className="font-heading text-sm font-bold uppercase tracking-wider text-amber-500">
+              Pendientes de aprobación ({pendientes.length})
+            </span>
+            <span className="rounded-full bg-amber-500/15 px-2 py-0.5 text-xs font-semibold text-amber-500">
+              Enviados desde el sitio web
+            </span>
+          </div>
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {pendientes.map((t) => (
+              <div key={t.id} className="rounded-xl border border-amber-500/30 bg-amber-500/5 p-5">
+                <div className="flex items-start justify-between gap-2">
+                  <div className="flex items-center gap-3">
+                    <Avatar className="size-10">
+                      <AvatarImage src={t.foto_url ?? undefined} />
+                      <AvatarFallback className="bg-amber-500/15 text-amber-600">
+                        {t.nombre_cliente.charAt(0)}
+                      </AvatarFallback>
+                    </Avatar>
+                    <div>
+                      <p className="text-sm font-semibold">{t.nombre_cliente}</p>
+                      <div className="flex gap-0.5">
+                        {Array.from({ length: 5 }).map((_, i) => (
+                          <Star key={i} className="size-3" fill={i < t.calificacion ? "currentColor" : "none"} color="var(--color-primary)" />
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                  <Button
+                    size="sm"
+                    className="cursor-pointer text-xs"
+                    onClick={() =>
+                      startTransition(async () => {
+                        const result = await actualizarTestimonio(t.id, { activo: true });
+                        if (!result.success) toast.error(result.error ?? "Error");
+                        else toast.success("Reseña aprobada y publicada");
+                      })
+                    }
+                    disabled={pending}
+                  >
+                    Aprobar
+                  </Button>
+                </div>
+                <p className="mt-3 line-clamp-3 text-sm text-muted-foreground">{t.texto}</p>
+                <div className="mt-4 flex justify-end gap-1">
+                  <Button variant="ghost" size="icon-sm" className="cursor-pointer" onClick={() => openEdit(t)}>
+                    <Pencil className="size-4" />
+                  </Button>
+                  <Button variant="ghost" size="icon-sm" className="cursor-pointer text-destructive hover:text-destructive" onClick={() => handleEliminar(t)}>
+                    <Trash2 className="size-4" />
+                  </Button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Aprobadas y visibles en el sitio */}
+      <div className="space-y-3">
+        {pendientes.length > 0 && (
+          <span className="font-heading text-sm font-bold uppercase tracking-wider text-muted-foreground">
+            Publicadas ({aprobados.length})
+          </span>
+        )}
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {aprobados.map((t) => (
           <div key={t.id} className="rounded-xl border border-border bg-card p-5">
             <div className="flex items-start justify-between gap-2">
               <div className="flex items-center gap-3">
@@ -154,7 +225,8 @@ export function TestimoniosManager({ items }: { items: Testimonio[] }) {
               </Button>
             </div>
           </div>
-        ))}
+          ))}
+        </div>
       </div>
 
       <Dialog open={open} onOpenChange={setOpen}>

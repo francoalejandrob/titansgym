@@ -25,6 +25,7 @@ const navLinks = [
   { href: "/#testimonios", label: "Testimonios" },
   { href: "/#ubicacion", label: "Ubicación" },
   { href: "/#contacto", label: "Contacto" },
+  { href: "/registrate", label: "Regístrate" },
 ];
 
 export function Navbar({ config }: { config: ConfiguracionSitio }) {
