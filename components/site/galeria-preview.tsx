@@ -8,7 +8,7 @@ export function GaleriaPreview({ items }: { items: GaleriaItem[] }) {
   if (items.length === 0) return null;
 
   return (
-    <section id="galeria" className="mx-auto max-w-7xl scroll-mt-24 px-6 py-24">
+    <section id="galeria" className="mx-auto max-w-7xl scroll-mt-24 px-6 py-14 sm:py-24">
       <div className="mx-auto max-w-2xl text-center">
         <span className="text-sm font-semibold uppercase tracking-widest text-primary">
           Instalaciones

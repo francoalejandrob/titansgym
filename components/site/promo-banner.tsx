@@ -27,9 +27,9 @@ export function PromoBanner({ promo }: { promo: Promocion }) {
         {/* Red left accent bar */}
         <div className="absolute left-0 top-0 bottom-0 w-1 bg-primary z-10" />
 
-        <div className="relative z-10 grid sm:grid-cols-2 min-h-[420px]">
-          {/* Left — flyer image as a contained card */}
-          <div className="flex items-center justify-center p-8 sm:p-10">
+        <div className="relative z-10 grid sm:grid-cols-2 min-h-0 sm:min-h-[420px]">
+          {/* Image — hidden on mobile, shown left on desktop */}
+          <div className="hidden items-center justify-center p-8 sm:flex sm:p-10">
             <motion.div
               initial={{ opacity: 0, scale: 0.93, x: -20 }}
               whileInView={{ opacity: 1, scale: 1, x: 0 }}
@@ -47,7 +47,7 @@ export function PromoBanner({ promo }: { promo: Promocion }) {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true, margin: "-80px" }}
             transition={{ duration: 0.7, delay: 0.25 }}
-            className="flex flex-col justify-center gap-6 px-6 py-10 sm:px-10 sm:py-12"
+            className="flex flex-col justify-center gap-5 px-6 py-8 sm:gap-6 sm:px-10 sm:py-12"
           >
             <span className="inline-flex w-fit items-center gap-2 rounded-full border border-primary/30 bg-primary/10 px-3 py-1.5 text-xs font-bold uppercase tracking-widest text-primary">
               <Crown className="size-3.5" />
@@ -55,7 +55,7 @@ export function PromoBanner({ promo }: { promo: Promocion }) {
             </span>
 
             <div>
-              <h2 className="font-heading text-4xl font-black uppercase leading-tight tracking-tight text-foreground sm:text-5xl">
+              <h2 className="font-heading text-3xl font-black uppercase leading-tight tracking-tight text-foreground sm:text-5xl">
                 {promo.titulo}
               </h2>
               {promo.descuento && (

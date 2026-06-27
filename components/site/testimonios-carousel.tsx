@@ -25,7 +25,7 @@ export function TestimoniosCarousel({ items }: { items: Testimonio[] }) {
   return (
     <section
       id="testimonios"
-      className="mx-auto max-w-7xl scroll-mt-24 px-6 py-24"
+      className="mx-auto max-w-7xl scroll-mt-24 px-6 py-14 sm:py-24"
     >
       <div className="flex flex-col items-center justify-between gap-6 sm:flex-row sm:items-end">
         <div className="text-center sm:text-left">

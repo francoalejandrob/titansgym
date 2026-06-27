@@ -8,17 +8,6 @@ import { PlanCard } from "@/components/site/plan-card";
 import { planesGenerales } from "@/lib/data/plans";
 import type { Membresia } from "@/lib/types/database";
 
-const container = {
-  hidden: {},
-  show: { transition: { staggerChildren: 0.1 } },
-};
-
-const item = {
-  hidden: { opacity: 0, y: 32 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.5 } },
-};
-
-// Fallback: convert hardcoded plans to Membresia shape
 function getFallbackPlanes(): Membresia[] {
   return planesGenerales.map((p, i) => ({
     id: p.id,
@@ -48,7 +37,7 @@ export function PlanesPreview({ phone, planes = [] }: { phone: string; planes?: 
     : getFallbackPlanes();
 
   return (
-    <section id="planes" className="mx-auto max-w-7xl scroll-mt-24 px-6 py-24">
+    <section id="planes" className="mx-auto max-w-7xl scroll-mt-24 px-6 py-14 sm:py-24">
       <motion.div
         initial={{ opacity: 0, y: 24 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -59,7 +48,7 @@ export function PlanesPreview({ phone, planes = [] }: { phone: string; planes?: 
         <span className="text-sm font-semibold uppercase tracking-widest text-primary">
           Membresías
         </span>
-        <h2 className="mt-3 font-heading text-4xl font-extrabold uppercase tracking-tight sm:text-5xl">
+        <h2 className="mt-3 font-heading text-3xl font-extrabold uppercase tracking-tight sm:text-5xl">
           Elige tu plan
         </h2>
         <p className="mt-4 text-muted-foreground">
@@ -68,15 +57,36 @@ export function PlanesPreview({ phone, planes = [] }: { phone: string; planes?: 
         </p>
       </motion.div>
 
+      {/* Mobile: snap scroll horizontal */}
+      <div className="mt-10 sm:hidden">
+        <div className="flex snap-x snap-mandatory gap-4 overflow-x-auto pb-3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+          {generales.map((plan) => (
+            <div key={plan.id} className="w-[80vw] shrink-0 snap-start">
+              <PlanCard plan={plan} phone={phone} />
+            </div>
+          ))}
+        </div>
+        <p className="mt-3 text-center text-xs text-muted-foreground">
+          Desliza para ver más planes →
+        </p>
+      </div>
+
+      {/* Desktop: grid */}
       <motion.div
-        variants={container}
         initial="hidden"
         whileInView="show"
         viewport={{ once: true, margin: "-80px" }}
-        className="mt-14 grid gap-6 sm:grid-cols-2 lg:grid-cols-4"
+        variants={{ hidden: {}, show: { transition: { staggerChildren: 0.1 } } }}
+        className="mt-14 hidden grid-cols-2 gap-6 sm:grid lg:grid-cols-4"
       >
         {generales.map((plan) => (
-          <motion.div key={plan.id} variants={item}>
+          <motion.div
+            key={plan.id}
+            variants={{
+              hidden: { opacity: 0, y: 32 },
+              show: { opacity: 1, y: 0, transition: { duration: 0.5 } },
+            }}
+          >
             <PlanCard plan={plan} phone={phone} />
           </motion.div>
         ))}
@@ -87,7 +97,7 @@ export function PlanesPreview({ phone, planes = [] }: { phone: string; planes?: 
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-40px" }}
         transition={{ duration: 0.5, delay: 0.2 }}
-        className="mt-12 text-center"
+        className="mt-10 text-center"
       >
         <Button
           render={<Link href="/planes" />}

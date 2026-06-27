@@ -68,7 +68,6 @@ export function ImcCalculator({ phone }: { phone: string }) {
     const pesoKg = parseFloat(peso.replace(",", "."));
     const alturaCm = parseFloat(altura.replace(",", "."));
     if (!pesoKg || !alturaCm || pesoKg <= 0 || alturaCm <= 0) return;
-
     const alturaM = alturaCm / 100;
     const imc = pesoKg / (alturaM * alturaM);
     setResultado({ imc, clasificacion: clasificar(imc) });
@@ -82,24 +81,25 @@ export function ImcCalculator({ phone }: { phone: string }) {
     : "#";
 
   return (
-    <section id="imc" className="mx-auto max-w-7xl scroll-mt-24 px-6 py-24">
+    <section id="imc" className="mx-auto max-w-7xl scroll-mt-24 px-6 py-14 sm:py-24">
       <div className="overflow-hidden rounded-2xl border border-border bg-card">
         <div className="grid lg:grid-cols-2">
-          <div className="flex flex-col justify-center p-8 sm:p-12">
+          {/* Form */}
+          <div className="flex flex-col justify-center p-6 sm:p-12">
             <span className="inline-flex w-fit items-center gap-2 rounded-full bg-primary/15 px-3 py-1 text-xs font-bold uppercase tracking-widest text-primary">
               <Calculator className="size-4" />
               Herramienta gratuita
             </span>
-            <h2 className="mt-4 font-heading text-3xl font-extrabold uppercase tracking-tight sm:text-4xl">
+            <h2 className="mt-4 font-heading text-2xl font-extrabold uppercase tracking-tight sm:text-4xl">
               Calcula tu IMC
             </h2>
-            <p className="mt-3 max-w-md text-muted-foreground">
+            <p className="mt-3 text-sm text-muted-foreground sm:text-base">
               Conoce tu Índice de Masa Corporal y recibe una recomendación
               inicial para tu plan de entrenamiento.
             </p>
 
-            <form onSubmit={calcular} className="mt-8 space-y-5">
-              <div className="grid gap-5 sm:grid-cols-2">
+            <form onSubmit={calcular} className="mt-6 space-y-4">
+              <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-1.5">
                   <Label htmlFor="peso">Peso (kg)</Label>
                   <Input
@@ -127,9 +127,52 @@ export function ImcCalculator({ phone }: { phone: string }) {
                 Calcular IMC
               </Button>
             </form>
+
+            {/* Result inline on mobile (shows only when there is one) */}
+            <AnimatePresence>
+              {resultado && (
+                <motion.div
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: "auto" }}
+                  exit={{ opacity: 0, height: 0 }}
+                  transition={{ duration: 0.4 }}
+                  className="mt-6 overflow-hidden lg:hidden"
+                >
+                  <div className="rounded-xl border border-border bg-background/40 p-5">
+                    <p className="text-xs text-muted-foreground">Tu resultado</p>
+                    <p className="font-heading text-5xl font-black text-foreground">
+                      {resultado.imc.toFixed(1)}
+                    </p>
+                    <p className={cn("mt-1 inline-block rounded-full px-3 py-1 text-sm font-bold text-white", resultado.clasificacion.color)}>
+                      {resultado.clasificacion.label} ({resultado.clasificacion.rango})
+                    </p>
+                    <div className="mt-4 h-2 w-full overflow-hidden rounded-full bg-muted">
+                      <motion.div
+                        initial={{ width: 0 }}
+                        animate={{ width: `${resultado.clasificacion.percent}%` }}
+                        transition={{ duration: 0.7, ease: "easeOut" }}
+                        className={cn("h-full rounded-full", resultado.clasificacion.color)}
+                      />
+                    </div>
+                    <p className="mt-4 text-sm leading-relaxed text-muted-foreground">
+                      {resultado.clasificacion.recomendacion}
+                    </p>
+                    <Button
+                      render={<a href={whatsappHref} target="_blank" rel="noopener noreferrer" />}
+                      nativeButton={false}
+                      className="mt-4 w-full cursor-pointer"
+                    >
+                      <MessageCircle className="size-4" />
+                      Quiero asesoría personalizada
+                    </Button>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
 
-          <div className="flex flex-col justify-center border-t border-border bg-background/40 p-8 sm:p-12 lg:border-l lg:border-t-0">
+          {/* Result panel on desktop only */}
+          <div className="hidden flex-col justify-center border-l border-border bg-background/40 p-12 lg:flex">
             <AnimatePresence mode="wait">
               {resultado ? (
                 <motion.div
@@ -143,15 +186,9 @@ export function ImcCalculator({ phone }: { phone: string }) {
                   <p className="font-heading text-6xl font-black text-foreground">
                     {resultado.imc.toFixed(1)}
                   </p>
-                  <p
-                    className={cn(
-                      "mt-1 inline-block rounded-full px-3 py-1 text-sm font-bold text-white",
-                      resultado.clasificacion.color
-                    )}
-                  >
+                  <p className={cn("mt-1 inline-block rounded-full px-3 py-1 text-sm font-bold text-white", resultado.clasificacion.color)}>
                     {resultado.clasificacion.label} ({resultado.clasificacion.rango})
                   </p>
-
                   <div className="mt-6 h-2 w-full overflow-hidden rounded-full bg-muted">
                     <motion.div
                       initial={{ width: 0 }}
@@ -160,25 +197,19 @@ export function ImcCalculator({ phone }: { phone: string }) {
                       className={cn("h-full rounded-full", resultado.clasificacion.color)}
                     />
                   </div>
-
                   <p className="mt-5 text-sm leading-relaxed text-muted-foreground">
                     {resultado.clasificacion.recomendacion}
                   </p>
-
                   <Button
-                    render={
-                      <a href={whatsappHref} target="_blank" rel="noopener noreferrer" />
-                    }
+                    render={<a href={whatsappHref} target="_blank" rel="noopener noreferrer" />}
                     nativeButton={false}
                     className="mt-6 w-full cursor-pointer"
                   >
                     <MessageCircle className="size-4" />
                     Quiero asesoría personalizada
                   </Button>
-
                   <p className="mt-3 text-center text-xs text-muted-foreground">
-                    El IMC es una referencia general y no reemplaza una
-                    evaluación profesional.
+                    El IMC es una referencia general y no reemplaza una evaluación profesional.
                   </p>
                 </motion.div>
               ) : (
