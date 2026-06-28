@@ -59,7 +59,7 @@ export function PlanesPreview({ phone, planes = [] }: { phone: string; planes?: 
 
       {/* Mobile: snap scroll horizontal */}
       <div className="mt-10 sm:hidden">
-        <div className="flex snap-x snap-mandatory gap-4 overflow-x-auto pb-3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        <div className="flex snap-x snap-mandatory gap-4 overflow-x-auto pt-4 pb-3 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           {generales.map((plan) => (
             <div key={plan.id} className="w-[80vw] shrink-0 snap-start">
               <PlanCard plan={plan} phone={phone} />
